@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat</title>
+  <script>
+    let socket = new WebSocket(`ws://${location.host}/ws/{{ user_id }}`);
+
+    function sendMsg() {
+      let to = document.getElementById("to_id").value;
+      let msg = document.getElementById("msg").value;
+      if(to === "" || msg === "") {
+        alert("Kepada dan pesan tidak boleh kosong");
+        return;
+      }
+      socket.send(JSON.stringify({to: to, message: msg}));
+      document.getElementById("msg").value = "";
+    }
+
+    socket.onmessage = (event) => {
+      let data = JSON.parse(event.data);
+      let chat = document.getElementById("chat");
+      chat.innerHTML += `<p><b>${data.from}:</b> ${data.message}</p>`;
+    };
+
+    socket.onclose = () => {
+      alert("Koneksi WebSocket terputus");
+    };
+  </script>
+</head>
+<body>
+  <h2>Anda: {{ user_id }}</h2>
+  <input id="to_id" placeholder="Kepada (1 - 300)"><br>
+  <input id="msg" placeholder="Pesan">
+  <button onclick="sendMsg()">Kirim</button>
+  <div id="chat" style="margin-top: 20px; border:1px solid #ccc; padding:10px; height:300px; overflow-y:auto;"></div>
+</body>
+</html>
