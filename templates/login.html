@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><title>Login</title></head>
+<body>
+  <h2>Masukkan Nomor Anda (1 - 300)</h2>
+  {% if error %}
+    <p style="color:red;">{{ error }}</p>
+  {% endif %}
+  <form action="/chat" method="post">
+    <input type="text" name="user_id" placeholder="Contoh: 107" required pattern="[0-9]{1,3}">
+    <button type="submit">Masuk</button>
+  </form>
+</body>
+</html>
